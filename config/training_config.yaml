@@ -1,0 +1,112 @@
+# Training Configuration for Land Cover Classification
+# NASA MODIS MCD12C1 Classification Project
+
+experiment:
+  name: "landcover_classification"
+  description: "MODIS land cover classification with RF and CNN models"
+  tags: ["landcover", "modis", "classification", "remote-sensing"]
+
+data:
+  years:
+    start: 2001
+    end: 2022
+  train_split: 0.7
+  val_split: 0.2
+  test_split: 0.1
+  random_seed: 42
+
+  # Feature extraction parameters
+  features:
+    spectral_bands: true
+    ndvi: true
+    temporal_features: true
+    spatial_features: true
+
+  # Data augmentation (for CNN)
+  augmentation:
+    rotation: true
+    flip: true
+    noise: 0.05
+    brightness: 0.1
+
+# Model configurations
+models:
+  random_forest:
+    n_estimators: [100, 200, 500]
+    max_depth: [10, 20, null]
+    min_samples_split: [2, 5, 10]
+    min_samples_leaf: [1, 2, 4]
+    class_weight: "balanced"
+    random_state: 42
+    n_jobs: -1
+
+  cnn:
+    architecture: "resnet18"
+    pretrained: false
+    num_classes: 17  # IGBP classes
+    dropout: 0.5
+
+    optimizer:
+      type: "adam"
+      lr: 0.001
+      weight_decay: 1e-4
+
+    scheduler:
+      type: "step"
+      step_size: 10
+      gamma: 0.1
+
+    training:
+      epochs: 50
+      batch_size: 32
+      early_stopping:
+        patience: 10
+        min_delta: 0.001
+
+# MLflow configuration
+mlflow:
+  tracking_uri: "http://localhost:5000"
+  experiment_name: "landcover_classification"
+  run_name_template: "{model_type}_{timestamp}"
+
+  # Metrics to log
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1_score"
+    - "confusion_matrix"
+
+  # Artifacts to save
+  artifacts:
+    - "model"
+    - "feature_importance"
+    - "confusion_matrix_plot"
+    - "training_curves"
+    - "predictions_sample"
+
+# Evaluation parameters
+evaluation:
+  cv_folds: 5
+  stratify: true
+  scoring: ["accuracy", "f1_macro", "precision_macro", "recall_macro"]
+
+  # Model selection criteria
+  selection:
+    primary_metric: "f1_macro"
+    maximize: true
+    min_improvement: 0.01
+
+# Resource configuration
+resources:
+  device: "auto"  # auto, cpu, cuda
+  num_workers: 4
+  memory_limit: "8GB"
+
+# Output configuration
+output:
+  model_registry: "models"
+  plots_dir: "plots"
+  reports_dir: "reports"
+  save_predictions: true
+  save_feature_importance: true

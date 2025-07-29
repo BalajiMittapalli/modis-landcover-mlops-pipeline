@@ -1,0 +1,82 @@
+# Configuration for MODIS data ingestion
+# NASA MODIS MCD12C1 Land Cover Data Configuration
+
+data_sources:
+  modis_mcd12c1:
+    base_url: "https://e4ftl01.cr.usgs.gov/MOTA/MCD12C1.061/"
+    product_name: "MCD12C1"
+    version: "061"
+    resolution: "0.05deg"
+    projection: "EPSG:4326"
+
+processing:
+  years:
+    start: 2001
+    end: 2022
+
+  output_format: "GeoTIFF"
+  data_type: "Byte"
+  nodata_value: 255
+
+  subdatasets:
+    igbp: "Majority_Land_Cover_Type_1"
+    igbp_percent: "Majority_Land_Cover_Type_1_Percent"
+    lai: "Leaf_Area_Index"
+    fpar: "FPAR"
+
+directories:
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  logs: "logs"
+
+quality_control:
+  validate_checksums: true
+  check_spatial_extent: true
+  min_valid_pixels_percent: 80
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(levelname)s - %(message)s"
+  file: "logs/data_ingestion.log"
+
+# Land cover class definitions (IGBP)
+land_cover_classes:
+  0: "Water Bodies"
+  1: "Evergreen Needleleaf Forests"
+  2: "Evergreen Broadleaf Forests"
+  3: "Deciduous Needleleaf Forests"
+  4: "Deciduous Broadleaf Forests"
+  5: "Mixed Forests"
+  6: "Closed Shrublands"
+  7: "Open Shrublands"
+  8: "Woody Savannas"
+  9: "Savannas"
+  10: "Grasslands"
+  11: "Permanent Wetlands"
+  12: "Croplands"
+  13: "Urban and Built-up Lands"
+  14: "Cropland/Natural Vegetation Mosaics"
+  15: "Permanent Snow and Ice"
+  16: "Barren"
+  255: "Unclassified"
+
+# Color mapping for visualization
+colors:
+  0: "#4169E1"   # Water - Royal Blue
+  1: "#006400"   # Evergreen Needleleaf - Dark Green
+  2: "#228B22"   # Evergreen Broadleaf - Forest Green
+  3: "#32CD32"   # Deciduous Needleleaf - Lime Green
+  4: "#90EE90"   # Deciduous Broadleaf - Light Green
+  5: "#00FF00"   # Mixed Forests - Lime
+  6: "#8FBC8F"   # Closed Shrublands - Dark Sea Green
+  7: "#9ACD32"   # Open Shrublands - Yellow Green
+  8: "#DAA520"   # Woody Savannas - Goldenrod
+  9: "#FFD700"   # Savannas - Gold
+  10: "#ADFF2F"  # Grasslands - Green Yellow
+  11: "#00CED1"  # Wetlands - Dark Turquoise
+  12: "#FF8C00"  # Croplands - Dark Orange
+  13: "#FF0000"  # Urban - Red
+  14: "#FF69B4"  # Cropland/Vegetation - Hot Pink
+  15: "#FFFFFF"  # Snow/Ice - White
+  16: "#D2691E"  # Barren - Chocolate
+  255: "#696969" # Unclassified - Dim Gray

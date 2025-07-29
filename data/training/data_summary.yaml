@@ -1,0 +1,33 @@
+class_distribution_test:
+  0: 92
+  1: 170
+  2: 246
+  6: 401
+  7: 503
+  10: 744
+  12: 253
+  13: 54
+  16: 37
+class_distribution_train:
+  0: 258
+  1: 611
+  2: 834
+  6: 1307
+  7: 1599
+  10: 2411
+  12: 704
+  13: 148
+  16: 128
+classes: 9
+feature_names:
+- longitude
+- latitude
+- dist_from_equator
+- dist_from_prime_meridian
+- row_normalized
+- col_normalized
+- years_since_start
+features: 7
+test_samples: 2500
+train_samples: 8000
+val_samples: 2000
