@@ -1,0 +1,153 @@
+version: '3.8'
+
+services:
+  # MLflow Tracking Server with SQLite backend
+  mlflow:
+    image: python:3.9-slim
+    container_name: mlflow-server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+      - ./mlflow.db:/mlflow/mlflow.db
+      - ./artifacts:/mlflow/artifacts
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=sqlite:///mlflow/mlflow.db
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlflow/artifacts
+    command: >
+      bash -c "
+        pip install mlflow[extras] &&
+        mlflow server
+        --backend-store-uri sqlite:///mlflow/mlflow.db
+        --default-artifact-root /mlflow/artifacts
+        --host 0.0.0.0
+        --port 5000
+      "
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  # Optional: PostgreSQL for production MLflow backend
+  postgres:
+    image: postgres:13
+    container_name: mlflow-postgres
+    environment:
+      POSTGRES_DB: mlflow
+      POSTGRES_USER: mlflow
+      POSTGRES_PASSWORD: mlflow_password
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mlflow -d mlflow"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    profiles: ["postgres"]
+
+  # MLflow with PostgreSQL backend (for production use)
+  mlflow-postgres:
+    image: python:3.9-slim
+    container_name: mlflow-postgres-server
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./mlruns:/mlflow/mlruns
+      - ./artifacts:/mlflow/artifacts
+    environment:
+      - MLFLOW_BACKEND_STORE_URI=postgresql://mlflow:mlflow_password@postgres:5432/mlflow
+      - MLFLOW_DEFAULT_ARTIFACT_ROOT=/mlflow/artifacts
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      bash -c "
+        pip install mlflow[extras] psycopg2-binary &&
+        mlflow server
+        --backend-store-uri postgresql://mlflow:mlflow_password@postgres:5432/mlflow
+        --default-artifact-root /mlflow/artifacts
+        --host 0.0.0.0
+        --port 5000
+      "
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    profiles: ["postgres"]
+
+  # Jupyter Lab for interactive development and analysis
+  jupyter:
+    image: jupyter/datascience-notebook:latest
+    container_name: nasa-jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/home/jovyan/work
+      - ./notebooks:/home/jovyan/notebooks
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=nasa_landcover_2024
+    command: start-notebook.sh --NotebookApp.token='nasa_landcover_2024' --NotebookApp.password=''
+    restart: unless-stopped
+    profiles: ["jupyter"]
+
+  # Optional: MinIO for S3-compatible object storage (alternative to AWS S3)
+  minio:
+    image: minio/minio:latest
+    container_name: nasa-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin123
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    restart: unless-stopped
+    profiles: ["minio"]
+
+  # Redis for caching (optional, for advanced deployments)
+  redis:
+    image: redis:7-alpine
+    container_name: nasa-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    restart: unless-stopped
+    profiles: ["redis"]
+
+volumes:
+  postgres_data:
+    driver: local
+  minio_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  default:
+    name: nasa-landcover-network
+    driver: bridge
