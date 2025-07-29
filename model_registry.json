@@ -1,0 +1,89 @@
+{
+  "models": [
+    {
+      "model_id": "modis-landcover-20250729-213538",
+      "model_path": "random_forest_model_20250729_213538.pkl",
+      "model_type": "random_forest",
+      "version": "1.0.0",
+      "accuracy": 0.39470198675496687,
+      "f1_score": 0.3010796840675686,
+      "training_timestamp": "2025-07-29T21:35:38.556495",
+      "registration_timestamp": "2025-07-29T21:35:38.745606",
+      "status": "active",
+      "metadata": {
+        "training_samples": 3771,
+        "model_size_mb": 14.83720588684082,
+        "feature_count": 0,
+        "model_params": {
+          "n_estimators": 200,
+          "max_depth": 20,
+          "min_samples_split": 10,
+          "min_samples_leaf": 5
+        }
+      }
+    },
+    {
+      "model_id": "modis-landcover-20250729-213621",
+      "model_path": "random_forest_model_20250729_213621.pkl",
+      "model_type": "random_forest",
+      "version": "1.0.0",
+      "accuracy": 0.4105960264900662,
+      "f1_score": 0.32140214946870416,
+      "training_timestamp": "2025-07-29T21:36:21.601671",
+      "registration_timestamp": "2025-07-29T21:36:21.667274",
+      "status": "active",
+      "metadata": {
+        "training_samples": 3771,
+        "model_size_mb": 2.196438789367676,
+        "feature_count": 0,
+        "model_params": {
+          "n_estimators": 50,
+          "max_depth": 10,
+          "min_samples_split": 5
+        }
+      }
+    },
+    {
+      "model_id": "modis-landcover-20250729-213805",
+      "model_path": "random_forest_model_20250729_213805.pkl",
+      "model_type": "random_forest",
+      "version": "1.0.0",
+      "accuracy": 0.3973509933774834,
+      "f1_score": 0.3213732459261302,
+      "training_timestamp": "2025-07-29T21:38:05.154260",
+      "registration_timestamp": "2025-07-29T21:38:05.242756",
+      "status": "active",
+      "metadata": {
+        "training_samples": 3771,
+        "model_size_mb": 2.3295154571533203,
+        "feature_count": 0,
+        "model_params": {
+          "n_estimators": 50,
+          "max_depth": 10,
+          "min_samples_split": 5
+        }
+      }
+    },
+    {
+      "model_id": "modis-landcover-20250729-214745",
+      "model_path": "random_forest_model_20250729_214745.pkl",
+      "model_type": "random_forest",
+      "version": "1.0.0",
+      "accuracy": 0.38543046357615895,
+      "f1_score": 0.2971406621279604,
+      "training_timestamp": "2025-07-29T21:47:45.459150",
+      "registration_timestamp": "2025-07-29T21:47:45.533457",
+      "status": "active",
+      "metadata": {
+        "training_samples": 3771,
+        "model_size_mb": 2.229888916015625,
+        "feature_count": 0,
+        "model_params": {
+          "n_estimators": 50,
+          "max_depth": 10,
+          "min_samples_split": 5
+        }
+      }
+    }
+  ]
+}
