@@ -233,7 +233,17 @@ def create_sample_data(
 
         # Create realistic land cover distribution
         base_classes = [0, 1, 2, 6, 7, 10, 12, 13, 16]  # Common classes
-        base_probs = [0.1, 0.15, 0.1, 0.1, 0.1, 0.2, 0.15, 0.05, 0.05]  # Base probabilities
+        base_probs = [
+            0.1,
+            0.15,
+            0.1,
+            0.1,
+            0.1,
+            0.2,
+            0.15,
+            0.05,
+            0.05,
+        ]  # Base probabilities
 
         # Add temporal changes (simulate land cover evolution)
         year_factor = (year - 2001) / 21.0  # Normalize to 0-1 range
@@ -275,7 +285,11 @@ def create_sample_data(
         # Create GeoTIFF
         driver = gdal.GetDriverByName("GTiff")
         dataset = driver.Create(
-            str(filename), shape[1], shape[0], 1, gdal.GDT_Byte  # width  # height  # bands
+            str(filename),
+            shape[1],
+            shape[0],
+            1,
+            gdal.GDT_Byte,  # width  # height  # bands
         )
 
         # Set geotransform (global extent, 0.05 degree resolution)

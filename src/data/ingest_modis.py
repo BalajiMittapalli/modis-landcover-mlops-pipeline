@@ -25,7 +25,10 @@ load_dotenv()
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s",
-    handlers=[logging.FileHandler("data_ingestion.log"), logging.StreamHandler(sys.stdout)],
+    handlers=[
+        logging.FileHandler("data_ingestion.log"),
+        logging.StreamHandler(sys.stdout),
+    ],
 )
 logger = logging.getLogger(__name__)
 
@@ -50,7 +53,10 @@ class MODISIngester:
         self.igbp_subdataset = 'HDF4_EOS:EOS_GRID:"{filename}":MCD12C1:Majority_Land_Cover_Type_1'
 
     def process_all_years(
-        self, start_year: int = 2001, end_year: int = 2022, credentials: Optional[Dict] = None
+        self,
+        start_year: int = 2001,
+        end_year: int = 2022,
+        credentials: Optional[Dict] = None,
     ) -> List[int]:
         """
         Process MODIS data for all years in range.
@@ -107,7 +113,10 @@ def main():
     ingester = MODISIngester()
 
     # NASA Earthdata credentials (replace with actual credentials)
-    credentials = {"username": os.getenv("NASA_USERNAME"), "password": os.getenv("NASA_PASSWORD")}
+    credentials = {
+        "username": os.getenv("NASA_USERNAME"),
+        "password": os.getenv("NASA_PASSWORD"),
+    }
 
     # Check if credentials are provided
     if not credentials["username"] or not credentials["password"]:

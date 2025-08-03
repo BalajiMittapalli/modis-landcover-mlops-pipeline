@@ -169,11 +169,25 @@ class MODISFeatureExtractor:
         names = []
 
         # Spectral features
-        spectral_names = ["mean", "std", "median", "min", "max", "q25", "q75", "variance"]
+        spectral_names = [
+            "mean",
+            "std",
+            "median",
+            "min",
+            "max",
+            "q25",
+            "q75",
+            "variance",
+        ]
         names.extend([f"spectral_{name}" for name in spectral_names])
 
         # Spatial features
-        spatial_names = ["local_var_mean", "local_var_std", "gradient_mean", "gradient_std"]
+        spatial_names = [
+            "local_var_mean",
+            "local_var_std",
+            "gradient_mean",
+            "gradient_std",
+        ]
         names.extend(spatial_names)
 
         # Texture features
@@ -256,7 +270,10 @@ class MODISFeatureExtractor:
                         spectral_features,
                         spatial_features,
                         texture_features,
-                        [row / data.shape[0], col / data.shape[1]],  # Normalized coordinates
+                        [
+                            row / data.shape[0],
+                            col / data.shape[1],
+                        ],  # Normalized coordinates
                     ]
                 )
 
@@ -468,7 +485,10 @@ class LandCoverClassifier:
 
         if hasattr(self.model, "feature_importances_"):
             importance_df = pd.DataFrame(
-                {"feature": self.feature_names, "importance": self.model.feature_importances_}
+                {
+                    "feature": self.feature_names,
+                    "importance": self.model.feature_importances_,
+                }
             ).sort_values("importance", ascending=False)
 
             return importance_df
@@ -544,10 +564,16 @@ def main():
         help="Machine learning algorithm to use",
     )
     parser.add_argument(
-        "--data_dir", type=str, default="data/processed", help="Directory containing MODIS data"
+        "--data_dir",
+        type=str,
+        default="data/processed",
+        help="Directory containing MODIS data",
     )
     parser.add_argument(
-        "--sample_ratio", type=float, default=0.01, help="Ratio of pixels to sample from each file"
+        "--sample_ratio",
+        type=float,
+        default=0.01,
+        help="Ratio of pixels to sample from each file",
     )
     parser.add_argument("--n_estimators", type=int, default=200, help="Number of estimators")
     parser.add_argument("--max_depth", type=int, default=20, help="Maximum depth of trees")

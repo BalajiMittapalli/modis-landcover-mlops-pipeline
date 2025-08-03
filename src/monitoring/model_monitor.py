@@ -227,10 +227,15 @@ def main():
         help="URL of the model server to monitor",
     )
     parser.add_argument(
-        "--monitor_interval", type=int, default=300, help="Monitoring interval in seconds"
+        "--monitor_interval",
+        type=int,
+        default=300,
+        help="Monitoring interval in seconds",
     )
     parser.add_argument(
-        "--run_once", action="store_true", help="Run monitoring once instead of continuously"
+        "--run_once",
+        action="store_true",
+        help="Run monitoring once instead of continuously",
     )
 
     args = parser.parse_args()
