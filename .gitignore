@@ -214,3 +214,19 @@ mlartifacts/
 # Monitoring
 grafana/data/
 prometheus/data/
+
+# Unwanted documentation and script files
+*_GUIDE.md
+*_EXPLANATION.md
+README_*.md
+!README.md
+SETUP_*.md
+TRAINING_*.md
+*.bat
+configs/
+docs/
+flows/README.md
+manage_*.py
+monitor_*.py
+start_*.bat
+activate_*.bat
