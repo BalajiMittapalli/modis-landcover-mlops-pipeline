@@ -1,0 +1,43 @@
+# Example terraform.tfvars file for MODIS Land Cover MLOps Infrastructure
+# Copy this file to terraform.tfvars and customize the values
+
+# Environment Configuration
+environment    = "dev"
+resource_owner = "mlops-team"
+
+# Cloud Provider Selection
+deploy_azure = true
+deploy_aws   = true
+
+# Azure Configuration
+azure_location   = "East US"
+container_cpu    = 2
+container_memory = 4
+
+# AWS Configuration
+aws_region         = "us-east-1"
+fargate_cpu        = 1024
+fargate_memory     = 2048
+ecs_desired_count  = 2
+
+# Monitoring and Logging
+log_retention_days = 30
+enable_monitoring  = true
+alert_email       = "your-email@example.com"
+
+# Security Configuration
+allowed_cidr_blocks = ["0.0.0.0/0"]  # Restrict this in production
+
+# Scaling Configuration
+auto_scaling_enabled     = true
+min_capacity            = 1
+max_capacity            = 10
+target_cpu_utilization  = 70
+
+# Backup Configuration
+backup_retention_days         = 7
+enable_point_in_time_recovery = true
+
+# MLflow Configuration (optional - will use defaults if not specified)
+# mlflow_backend_store_uri      = "postgresql://user:pass@host:port/db"
+# mlflow_default_artifact_root  = "s3://your-mlflow-bucket/artifacts"
